@@ -44,7 +44,28 @@
                      1px 15px 10px rgba(16, 16, 16, 0.4),
                      1px 20px 30px rgba(16, 16, 16, 0.3),
                      1px 25px 50px rgba(16, 16, 16, 0.2);
+        margin-bottom: 20px;
+      }
+
+      .quote-box {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        text-align: center;
         margin-bottom: 40px;
+      }
+      .quote-text {
+        font-size: 18px;
+        font-style: italic;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .quote-author {
+        font-size: 16px;
+        font-weight: 600;
+        color: #a9d339;
       }
 
       .quiz-box {
@@ -135,6 +156,12 @@
   <body>
     <div class="container">
       <div id="header"><h1>Your Mental Well-Being Matters</h1></div>
+
+      <!-- Quote Box -->
+      <div class="quote-box">
+        <p class="quote-text">"{{ quote.text }}"</p>
+        <p class="quote-author">— {{ quote.author }}</p>
+      </div>
 
       <!-- Quiz Box -->
       <div class="quiz-box">
