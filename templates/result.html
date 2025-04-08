@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Well-Being Results</title>
+    <title>Quiz Result</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
+            background-image: url('/static/backgroundimage.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             margin: 0;
             font-family: 'Roboto', sans-serif;
             color: #333;
@@ -17,20 +19,16 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: url('/static/backgroundimage.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             padding: 20px;
         }
         .result-box {
             background-image: linear-gradient(#ade63c, #deec37);
             padding: 30px;
             border-radius: 15px;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
             animation: fadeIn 0.5s ease-in-out;
         }
         @keyframes fadeIn {
@@ -38,62 +36,30 @@
             to { opacity: 1; transform: translateY(0); }
         }
         h2 {
-            color: #2c5f2d;
             font-size: 28px;
             margin-bottom: 20px;
+            color: #2c5f2d;
         }
-        .status {
-            font-size: 20px;
+        p {
+            font-size: 16px;
             margin: 10px 0;
         }
-        .high-risk { color: #d32f2f; font-weight: 500; }
-        .moderate-risk { color: #f57c00; font-weight: 500; }
-        .low-risk { color: #2c5f2d; font-weight: 500; }
-        .notes {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-size: 16px;
-            color: #444;
-        }
-        .youtube-section {
-            margin-top: 20px;
-        }
-        .youtube-link {
-            margin: 15px 0;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .youtube-link img {
-            width: 88px; /* Matches channel avatar size */
-            height: 88px;
-            object-fit: contain; /* Prevents stretching, keeps original aspect */
-            border-radius: 50%; /* Circular like YouTube avatars */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .youtube-link a {
+        .home-btn {
+            background-color: #c2fbd7;
+            border-radius: 25px;
+            padding: 10px 25px;
             color: #2c5f2d;
-            text-decoration: none;
+            font-size: 16px;
             font-weight: 500;
-        }
-        .youtube-link a:hover {
-            text-decoration: underline;
-        }
-        .restart-btn {
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
             display: inline-block;
             margin-top: 20px;
-            padding: 10px 25px;
-            background-color: #c2fbd7;
-            color: #2c5f2d;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
         }
-        .restart-btn:hover {
+        .home-btn:hover {
             background-color: #b0eccd;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -103,28 +69,15 @@
 <body>
     <div class="container">
         <div class="result-box">
-            <h2>Your Well-Being Assessment</h2>
-            <p class="status">Your well-being level is: 
-                <span class="{% if wellbeing_status == 'Poor' %}high-risk{% elif wellbeing_status == 'Average' %}moderate-risk{% else %}low-risk{% endif %}">
-                    {{ wellbeing_status }}
-                </span>
-            </p>
-            <p>Your score: {{ "%.1f"|format(score) }}%</p>
-            <div class="notes">{{ notes }}</div>
-
-            {% if youtube_links %}
-                <div class="youtube-section">
-                    <h3>Recommended Resources</h3>
-                    {% for link in youtube_links %}
-                        <div class="youtube-link">
-                            <img src="{{ link.thumbnail }}" alt="{{ link.title }}">
-                            <a href="{{ link.link }}" target="_blank">{{ link.title }}</a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <a href="{{ url_for('home') }}" class="restart-btn">Take the Quiz Again</a>
+            <h2>Your Well-Being Result</h2>
+            <p><strong>Score:</strong> {{ "%.1f"|format(score) }}%</p>
+            <p><strong>Status:</strong> {{ wellbeing_status }}</p>
+            <p><strong>Notes:</strong> {{ notes }}</p>
+            <h3>Recommended Resources</h3>
+            {% for link in youtube_links %}
+                <p><a href="{{ link.link }}" target="_blank">{{ link.title }}</a></p>
+            {% endfor %}
+            <a href="/" class="home-btn">Back to Home</a>
         </div>
     </div>
 </body>

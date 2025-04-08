@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "your_secret_key")
 
-# Define Questions (Removed Duplicates)
+# Define Questions
 questions = [
     {"question": "How often do you exercise in a week?", "options": ["Never", "1-2 times", "3-4 times", "5+ times"]},
     {"question": "How connected do you feel with family/friends?", "options": ["Not at all", "Somewhat", "Moderately", "Very Connected"]},
@@ -19,34 +19,19 @@ questions = [
     {"question": "Do you follow a proper sleep schedule?", "options": ["No", "Sometimes", "Yes", "Strictly"]}
 ]
 
-# Enhanced Scoring System (Aligned with Well-Being)
+# Enhanced Scoring System
 scoring = {
-    # Exercise (more = better)
     "Never": 1, "1-2 times": 2, "3-4 times": 3, "5+ times": 4,
-    # Connection (more = better)
     "Not at all": 1, "Somewhat": 2, "Moderately": 3, "Very Connected": 4,
-    # Sleep (7-8 optimal)
     "Less than 5": 1, "5-6": 2, "7-8": 4, "More than 8": 3,
-    # Water (more = better)
     "Less than 1L": 1, "1-2L": 2, "2-3L": 3, "More than 3L": 4,
-    # Breaks (moderate = better)
     "Less than 1": 1, "1-3": 3, "4-6": 4, "More than 6": 2,
-    # Work-life balance (more satisfied = better)
     "Very Dissatisfied": 1, "Neutral": 2, "Satisfied": 3, "Very Satisfied": 4,
-    # Stress (less = better)
     "Rarely": 4, "Sometimes": 3, "Frequently": 2, "Constantly": 1,
-    # Social media (less = better)
     "Less than 30 min": 4, "30 min-1 hr": 3, "1-2 hrs": 2, "More than 2 hrs": 1,
-    # Mental health check-ups (more = better)
     "Never": 1, "Once a year": 3, "More than once a year": 4,
-    # Sleep schedule (more consistent = better)
     "No": 1, "Sometimes": 2, "Yes": 3, "Strictly": 4
 }
-
-@app.route("/")
-def home():
-    session.clear()
-    return render_template('home.html')
 
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
@@ -79,18 +64,26 @@ def result():
         if not user_answers:
             return redirect(url_for("home"))
 
-        total_score = sum(scoring.get(answer, 0) for answer in user_answers)
+        # Calculate total score and log each answer's contribution
+        total_score = 0
+        for answer in user_answers:
+            score = scoring.get(answer, 0)
+            total_score += score
+            print(f"Answer: {answer}, Score: {score}")  # Debugging output to console
+
         max_possible_score = len(questions) * 4  # 10 questions * 4 = 40
         percentage = min((total_score / max_possible_score) * 100, 100)
+        print(f"Total Score: {total_score}, Percentage: {percentage}%")  # Debugging output
 
-        if percentage < 33:
+        # Adjusted thresholds to better reflect poor well-being
+        if percentage < 40:  # Adjusted from 33 to 40
             wellbeing_status = "Poor"
             notes = "It's important to focus on improving your well-being. Consider lifestyle changes and seek support."
             youtube_links = [
                 {"title": "Kati Morton - Mental Health Tips", "link": "https://www.youtube.com/user/KatiMorton", "thumbnail": "https://yt3.ggpht.com/ytc/AIdro_lxV4fQ9zDHN3Y4k53mc4tH-AeN-6Y7fBHb2eL6=s88-c-k-c0x00ffffff-no-rj"},
                 {"title": "Therapy in a Nutshell - Coping Strategies", "link": "https://www.youtube.com/c/TherapyinaNutshell", "thumbnail": "https://yt3.ggpht.com/ytc/AIdro_nV2fjsEYa5RuX5z3cHrdim8wA8aOWuHHaWgeAj=s88-c-k-c0x00ffffff-no-rj"}
             ]
-        elif percentage < 66:
+        elif percentage < 70:  # Adjusted from 66 to 70
             wellbeing_status = "Average"
             notes = "You're doing okay, but there's room for improvement. Try incorporating healthier habits."
             youtube_links = [
@@ -113,19 +106,3 @@ def result():
                                score=percentage)
     except Exception as e:
         return f"Error calculating result: {str(e)}", 500
-
-# New Routes for Chatbox, Hobbies, and Music
-@app.route("/chatbox")
-def chatbox():
-    return render_template('chatbox.html')
-
-@app.route("/hobbies")
-def hobbies():
-    return render_template('hobbies.html')
-
-@app.route("/music")
-def music():
-    return render_template('music.html')
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)

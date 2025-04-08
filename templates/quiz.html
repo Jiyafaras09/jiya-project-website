@@ -88,6 +88,29 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .home-btn {
+            background-color: #f0f0f0; /* Different color to distinguish from Next */
+            border-radius: 25px;
+            padding: 10px 25px;
+            color: #2c5f2d;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-decoration: none; /* Remove underline from link */
+        }
+        .home-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -107,7 +130,10 @@
                             </label>
                         {% endfor %}
                     </div>
-                    <button type="submit" class="next-btn">Next</button>
+                    <div class="button-container">
+                        <a href="/" class="home-btn">Back to Home</a>
+                        <button type="submit" class="next-btn">Next</button>
+                    </div>
                 </form>
             {% else %}
                 <p>Question not available.</p>
